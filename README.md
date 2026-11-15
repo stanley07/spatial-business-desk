@@ -13,7 +13,7 @@ See your inventory. Reach for products. Prepare orders. Confirm sales. Watch you
 
 *Explore the interactive workspace in your browser.*
 
-**[WATCH THE DEMO](submission_assets/Spatial_Business_Desk_MetaVR2026_FINAL.mp4)** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
+**Demo video: publishing soon** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
 
 ---
 
@@ -175,7 +175,7 @@ Explore the working prototype and see what happens when inventory, interaction, 
 
 **[ENTER SPATIAL BUSINESS DESK](https://spatial-business-desk.pages.dev/)**
 
-**[WATCH THE DEMO](submission_assets/Spatial_Business_Desk_MetaVR2026_FINAL.mp4)**
+**Demo video: publishing soon**
 
 *Built for Meta VR Start Developer Competition 2026.*
 
@@ -191,10 +191,10 @@ Explore the working prototype and see what happens when inventory, interaction, 
 
 An immersive productivity concept exploring the future of business operations.
 
-**Live Experience:** [https://spatial-business-desk.pages.dev/](https://spatial-business-desk.pages.dev/)  
-**Source Code:** [https://github.com/stanley07/spatial-business-desk](https://github.com/stanley07/spatial-business-desk)  
-**Competition:** Meta VR Start Developer Competition 2026  
-**Technology:** Meta Immersive Web SDK · WebXR · Three.js · TypeScript  
+**Live Experience:** [https://spatial-business-desk.pages.dev/](https://spatial-business-desk.pages.dev/)
+**Source Code:** [https://github.com/stanley07/spatial-business-desk](https://github.com/stanley07/spatial-business-desk)
+**Competition:** Meta VR Start Developer Competition 2026
+**Technology:** Meta Immersive Web SDK · WebXR · Three.js · TypeScrip
 
 © 2026 Spatial Business Desk. Competition prototype.
 
