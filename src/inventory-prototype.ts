@@ -1,4 +1,20 @@
-﻿import {
+/**
+ * Spatial Business Desk - Retail Showroom Prototype
+ *
+ * DESKTOP CAMERA FRAMING & ROLLBACK CONFIGURATION (META-VR-21C.22):
+ * -----------------------------------------------------------------
+ * 1. Current Optimized Judge-Friendly Framing (iwsdk.config.json):
+ *    - FOV: 60 (75-85% viewport width occupancy, zero clipping)
+ *    - Position: [0, 1.38, 0.65]
+ *    - LookAt:   [0, 1.29, -1.65]
+ *
+ * 2. Original Production Rollback Option (Baseline commit 73563a5):
+ *    - FOV: 70
+ *    - Position: [0, 1.6, 1.0]
+ *    - LookAt:   [0, 0.95, -1.95]
+ */
+
+import {
   BoxGeometry,
   Mesh,
   MeshStandardMaterial,
@@ -340,29 +356,37 @@ export function createInventoryPrototype(world: World): void {
       context.textAlign = 'center';
       context.textBaseline = 'middle';
 
-      let currentY = canvasH * 0.25;
+      const hasEyebrow = Boolean(opts.eyebrow);
+      const hasTitle = Boolean(opts.title);
+      const hasSubtitle = Boolean(opts.subtitle);
 
-      // Eyebrow
-      if (opts.eyebrow) {
+      if (hasEyebrow && hasTitle && hasSubtitle) {
+        // Full Marquee 3-tier layout
         context.font = 'bold 54px "Segoe UI", -apple-system, sans-serif';
         context.fillStyle = opts.eyebrowColor || '#38bdf8';
-        context.fillText(opts.eyebrow.toUpperCase(), canvasW / 2, currentY, canvasW - 80);
-        currentY += canvasH * 0.25;
-      }
+        context.fillText(opts.eyebrow!.toUpperCase(), canvasW / 2, canvasH * 0.20, canvasW - 80);
 
-      // Title (large, high-contrast, bold figures)
-      if (opts.title) {
+        context.font = 'bold 100px "Segoe UI", -apple-system, sans-serif';
+        context.fillStyle = opts.titleColor || '#ffffff';
+        context.fillText(opts.title!, canvasW / 2, canvasH * 0.50, canvasW - 80);
+
+        context.font = '600 64px "Segoe UI", -apple-system, sans-serif';
+        context.fillStyle = opts.subtitleColor || '#cbd5e1';
+        context.fillText(opts.subtitle!, canvasW / 2, canvasH * 0.80, canvasW - 80);
+      } else if (hasTitle && hasSubtitle) {
+        // 2-tier layout (e.g. Confirm Sale Terminal)
         context.font = 'bold 96px "Segoe UI", -apple-system, sans-serif';
         context.fillStyle = opts.titleColor || (opts.isDisabled ? '#64748b' : '#ffffff');
-        context.fillText(opts.title, canvasW / 2, currentY, canvasW - 80);
-        currentY += canvasH * 0.25;
-      }
+        context.fillText(opts.title!, canvasW / 2, canvasH * 0.36, canvasW - 80);
 
-      // Subtitle
-      if (opts.subtitle) {
-        context.font = '600 62px "Segoe UI", -apple-system, sans-serif';
+        context.font = '600 64px "Segoe UI", -apple-system, sans-serif';
         context.fillStyle = opts.subtitleColor || (opts.isDisabled ? '#475569' : '#cbd5e1');
-        context.fillText(opts.subtitle, canvasW / 2, currentY, canvasW - 80);
+        context.fillText(opts.subtitle!, canvasW / 2, canvasH * 0.72, canvasW - 80);
+      } else if (hasTitle) {
+        // Centered single-tier layout (e.g. Cart action buttons: [+] ADD, [-] DEC, [x] REM, UNDO, CLEAR)
+        context.font = 'bold 112px "Segoe UI", -apple-system, sans-serif';
+        context.fillStyle = opts.titleColor || (opts.isDisabled ? '#64748b' : '#ffffff');
+        context.fillText(opts.title!, canvasW / 2, canvasH * 0.50, canvasW - 40);
       }
 
       // Custom multi-line support
@@ -415,6 +439,11 @@ export function createInventoryPrototype(world: World): void {
     -1.85,
     1.90,
     0.36,
+    undefined,
+    0,
+    0,
+    2048,
+    400,
   );
 
   // 2. MIDDLE: High-Clarity Product Information Cards (Directly above each product)
@@ -537,7 +566,7 @@ export function createInventoryPrototype(world: World): void {
     cartCtx.stroke();
 
     // 1. Header Bar (Top)
-    cartCtx.font = 'bold 44px "Segoe UI", sans-serif';
+    cartCtx.font = 'bold 48px "Segoe UI", sans-serif';
     cartCtx.fillStyle = '#38bdf8';
     cartCtx.textAlign = 'left';
     cartCtx.textBaseline = 'middle';
@@ -546,12 +575,12 @@ export function createInventoryPrototype(world: World): void {
     // Total readout on top right
     cartCtx.textAlign = 'right';
     if (hasItems) {
-      cartCtx.font = 'bold 48px "Segoe UI", sans-serif';
+      cartCtx.font = 'bold 50px "Segoe UI", sans-serif';
       cartCtx.fillStyle = '#34d399';
       cartCtx.fillText(`TOTAL: ${money(total)}  (${itemCount} ITEMS)`, 1984, 52);
     } else {
-      cartCtx.font = 'bold 40px "Segoe UI", sans-serif';
-      cartCtx.fillStyle = '#64748b';
+      cartCtx.font = 'bold 42px "Segoe UI", sans-serif';
+      cartCtx.fillStyle = '#94a3b8';
       cartCtx.fillText('TOTAL: NGN 0  (CART EMPTY)', 1984, 52);
     }
 
@@ -564,8 +593,8 @@ export function createInventoryPrototype(world: World): void {
     cartCtx.stroke();
 
     // 2. Table Column Guide
-    cartCtx.font = 'bold 26px "Segoe UI", sans-serif';
-    cartCtx.fillStyle = '#64748b';
+    cartCtx.font = 'bold 30px "Segoe UI", sans-serif';
+    cartCtx.fillStyle = '#94a3b8';
     cartCtx.textAlign = 'left';
     cartCtx.fillText('PRODUCT', 64, 126);
     cartCtx.fillText('UNIT PRICE', 420, 126);
@@ -581,44 +610,44 @@ export function createInventoryPrototype(world: World): void {
 
       // Row background highlight
       roundRect(cartCtx, 48, ry - 44, 1952, 88, 16);
-      cartCtx.fillStyle = isSel ? 'rgba(16, 185, 129, 0.12)' : 'rgba(30, 41, 59, 0.40)';
+      cartCtx.fillStyle = isSel ? 'rgba(16, 185, 129, 0.20)' : 'rgba(30, 41, 59, 0.65)';
       cartCtx.fill();
       if (isSel) {
-        cartCtx.lineWidth = 3;
-        cartCtx.strokeStyle = 'rgba(16, 185, 129, 0.40)';
+        cartCtx.lineWidth = 4;
+        cartCtx.strokeStyle = 'rgba(16, 185, 129, 0.70)';
         cartCtx.stroke();
       }
 
       // Color accent bullet
       cartCtx.beginPath();
-      cartCtx.arc(80, ry, 14, 0, Math.PI * 2);
+      cartCtx.arc(80, ry, 16, 0, Math.PI * 2);
       cartCtx.fillStyle = '#' + product.color.toString(16).padStart(6, '0');
       cartCtx.fill();
 
       // Product Name
-      cartCtx.font = 'bold 38px "Segoe UI", sans-serif';
-      cartCtx.fillStyle = isSel ? '#ffffff' : '#94a3b8';
+      cartCtx.font = 'bold 44px "Segoe UI", sans-serif';
+      cartCtx.fillStyle = isSel ? '#ffffff' : '#e2e8f0';
       cartCtx.textAlign = 'left';
       cartCtx.fillText(product.name, 115, ry);
 
       // Unit Price
-      cartCtx.font = '32px "Segoe UI", sans-serif';
+      cartCtx.font = 'bold 36px "Segoe UI", sans-serif';
       cartCtx.fillStyle = '#cbd5e1';
       cartCtx.fillText(money(product.price), 420, ry);
 
       // Quantity Pill
-      roundRect(cartCtx, 680, ry - 32, 140, 64, 14);
-      cartCtx.fillStyle = isSel ? 'rgba(16, 185, 129, 0.95)' : 'rgba(51, 65, 85, 0.60)';
+      roundRect(cartCtx, 670, ry - 34, 160, 68, 16);
+      cartCtx.fillStyle = isSel ? 'rgba(16, 185, 129, 0.98)' : 'rgba(51, 65, 85, 0.85)';
       cartCtx.fill();
-      cartCtx.font = 'bold 38px "Segoe UI", sans-serif';
-      cartCtx.fillStyle = isSel ? '#ffffff' : '#64748b';
+      cartCtx.font = 'bold 42px "Segoe UI", sans-serif';
+      cartCtx.fillStyle = '#ffffff';
       cartCtx.textAlign = 'center';
       cartCtx.fillText(`× ${product.selected}`, 750, ry + 2);
 
       // Line Total
       const lineTotal = product.selected * product.price;
-      cartCtx.font = 'bold 38px "Segoe UI", sans-serif';
-      cartCtx.fillStyle = isSel ? '#34d399' : '#475569';
+      cartCtx.font = 'bold 44px "Segoe UI", sans-serif';
+      cartCtx.fillStyle = isSel ? '#34d399' : '#64748b';
       cartCtx.textAlign = 'left';
       cartCtx.fillText(money(lineTotal), 940, ry);
     });
@@ -632,8 +661,8 @@ export function createInventoryPrototype(world: World): void {
     cartCtx.stroke();
 
     // 4. Footer Guide (Bottom)
-    cartCtx.font = '28px "Segoe UI", sans-serif';
-    cartCtx.fillStyle = '#64748b';
+    cartCtx.font = 'bold 30px "Segoe UI", sans-serif';
+    cartCtx.fillStyle = hasItems ? '#a7f3d0' : '#94a3b8';
     cartCtx.textAlign = 'center';
     cartCtx.fillText(
       hasItems
@@ -882,19 +911,19 @@ export function createInventoryPrototype(world: World): void {
           {
             text: product.name,
             color: '#ffffff',
-            font: 'bold 88px "Segoe UI", -apple-system, sans-serif',
+            font: 'bold 94px "Segoe UI", -apple-system, sans-serif',
           },
           {
             text: `PRICE: ${money(product.price)}`,
             color: isSelected ? '#34d399' : '#38bdf8',
-            font: 'bold 76px "Segoe UI", -apple-system, sans-serif',
+            font: 'bold 82px "Segoe UI", -apple-system, sans-serif',
           },
           {
             text: isSelected
               ? `STOCK: ${product.stock}   •   ORDER: ×${product.selected}`
               : `AVAILABLE: ${product.stock} UNITS`,
-            color: isSelected ? '#a7f3d0' : '#cbd5e1',
-            font: '600 68px "Segoe UI", -apple-system, sans-serif',
+            color: isSelected ? '#a7f3d0' : '#e2e8f0',
+            font: 'bold 72px "Segoe UI", -apple-system, sans-serif',
           },
         ],
         accentBorder: isSelected
@@ -903,7 +932,7 @@ export function createInventoryPrototype(world: World): void {
           ? '#f59e0b'
           : '#38bdf8',
         borderWidth: isSelected ? 16 : 10,
-        bgColor: isSelected ? 'rgba(6, 78, 59, 0.94)' : undefined,
+        bgColor: isSelected ? 'rgba(6, 78, 59, 0.96)' : undefined,
       });
 
       // Synchronize floating badge mesh
