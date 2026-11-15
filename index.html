@@ -1,16 +1,371 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="data:," />
-    <title>spatial-business-desk</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d2ff'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
+    <title>Spatial Business Desk — Your Business. Beyond the Screen.</title>
+    <meta name="description" content="A hands-first immersive workspace for inventory, orders, and sales. Built with Meta Immersive Web SDK for Meta VR Start Developer Competition 2026." />
   </head>
-  <body style="margin: 0">
+  <body style="margin: 0; background: #060a12; color: #f8fafc;">
+    <!-- 3D WebXR Canvas Container -->
     <div id="scene-container"></div>
+
+    <!-- Floating Navigation Bar inside 3D Experience -->
+    <nav id="floating-experience-bar" aria-label="Experience controls">
+      <button id="btn-return-overview" class="btn-return-overview" title="Return to Landing Page Overview">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Overview &amp; Vision
+      </button>
+      <div class="status-live-chip">
+        <span class="live-pulse-dot"></span>
+        3D Workspace Live
+      </div>
+      <a href="https://github.com/stanley07/spatial-business-desk" target="_blank" rel="noopener noreferrer" class="nav-link" style="padding: 4px 8px; font-size: 0.8rem; color: #94a3b8;">
+        GitHub ↗
+      </a>
+    </nav>
+
+    <!-- Cinematic Landing Page Overlay -->
+    <main id="landing-overlay" aria-label="Spatial Business Desk Overview">
+      <div class="ambient-glow-1"></div>
+      <div class="ambient-glow-2"></div>
+
+      <div class="landing-container">
+        <!-- Top Header Navigation -->
+        <header class="landing-nav">
+          <a href="#" class="brand-badge" aria-label="Spatial Business Desk">
+            <div class="brand-icon">SBD</div>
+            <div class="brand-title">Spatial Business Desk</div>
+          </a>
+          <nav class="nav-actions">
+            <a href="#showcase" class="nav-link">Showcase</a>
+            <a href="#vision" class="nav-link">Vision</a>
+            <a href="#tech" class="nav-link">Technology</a>
+            <a href="https://github.com/stanley07/spatial-business-desk" target="_blank" rel="noopener noreferrer" class="nav-link">Source ↗</a>
+            <button class="btn-primary action-enter-experience" style="padding: 10px 20px; font-size: 0.9rem;">
+              Enter Experience
+            </button>
+          </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="competition-pill">
+            <span class="pill-dot"></span>
+            Built for Meta VR Start Developer Competition 2026
+          </div>
+
+          <h1 class="hero-headline">
+            Your Business.<br />
+            <span class="gradient-text">Beyond the Screen.</span>
+          </h1>
+
+          <p class="hero-subtext">
+            A hands-first immersive workspace for inventory, orders, and sales. Reimagining everyday commerce for the open immersive web with Meta Immersive Web SDK.
+          </p>
+
+          <div class="cta-group">
+            <button id="btn-enter-hero" class="btn-primary action-enter-experience">
+              <span>Enter Experience</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <button id="btn-watch-demo" class="btn-secondary action-watch-demo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Watch Demo (101s)</span>
+            </button>
+            <a href="https://github.com/stanley07/spatial-business-desk" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <span>View Source</span>
+            </a>
+          </div>
+
+          <!-- Hero Image Frame -->
+          <div class="hero-image-wrapper">
+            <img
+              src="/images/spatial-business-desk-hero.png"
+              alt="Spatial Business Desk — Hands-First Immersive Workspace in XR"
+              class="hero-image"
+              loading="eager"
+            />
+            <div class="hero-badge-overlay">
+              <span class="live-pulse-dot"></span>
+              <span>WebXR Studio Prototype · Live in Meta Quest Browser &amp; Desktop</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Competition Positioning Section -->
+        <section class="competition-card">
+          <div class="competition-grid">
+            <div>
+              <div class="comp-feature-icon">🏆</div>
+              <div class="comp-feature-title">Meta VR Start 2026 Entry</div>
+              <div class="comp-feature-body">
+                Spatial Business Desk is entered into the <strong>Productivity / New Experience</strong> category, exploring how immersive technology transforms everyday commerce for small merchants.
+              </div>
+            </div>
+            <div>
+              <div class="comp-feature-icon">🌐</div>
+              <div class="comp-feature-title">Meta Immersive Web SDK</div>
+              <div class="comp-feature-body">
+                Built directly upon Meta’s official Immersive Web SDK (IWSDK v1.1.0), WebXR open standards, and EliCS ECS architecture for zero-install, browser-based spatial computing.
+              </div>
+            </div>
+            <div>
+              <div class="comp-feature-icon">🛡️</div>
+              <div class="comp-feature-title">Independent Competition Submission</div>
+              <div class="comp-feature-body">
+                An independent developer entry authored by Stanley Okafor using Meta developer technologies. Not sponsored by, endorsed by, or an official product of Meta Platforms, Inc.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Experience Showcase Section -->
+        <section id="showcase" style="padding-bottom: 80px;">
+          <div class="section-header">
+            <div class="section-label">Interactive Experience</div>
+            <h2 class="section-title">The Hands-First Retail Workflow</h2>
+            <p class="section-desc">
+              Experience a deliberate 5-stage spatial transaction lifecycle designed for physical intuition, operator speed, and complete inventory accuracy.
+            </p>
+          </div>
+
+          <!-- 5 Steps Grid -->
+          <div class="showcase-steps-grid">
+            <div class="step-card">
+              <div class="step-number">STEP 01</div>
+              <div class="step-title">See Your Inventory</div>
+              <p class="step-desc">
+                Step into a 3D showroom where products live on physical pedestals with live stock counters and transparent Naira pricing.
+              </p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">STEP 02</div>
+              <div class="step-title">Select with Your Hands</div>
+              <p class="step-desc">
+                Reach toward products using natural hand rays or direct touch. Verified end-to-end with simulated XR hands in WebXR.
+              </p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">STEP 03</div>
+              <div class="step-title">Prepare an Order</div>
+              <p class="step-desc">
+                Items stage into the central sales basket. Critical rule: <strong>Stock is NOT deducted</strong> until explicit confirmation.
+              </p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">STEP 04</div>
+              <div class="step-title">Confirm with Confidence</div>
+              <p class="step-desc">
+                Target the ergonomically angled confirmation button. Debounce locks prevent accidental double-billing.
+              </p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">STEP 05</div>
+              <div class="step-title">See Business Updates</div>
+              <p class="step-desc">
+                Watch inventory decrement, total revenue update, completed sales counter advance, and order reset instantaneously.
+              </p>
+            </div>
+          </div>
+
+          <!-- Visual Gallery Cards -->
+          <div class="showcase-gallery">
+            <div class="gallery-card">
+              <img src="/images/showcase-01-xr-simulator.jpg" alt="Simulated Hands in WebXR Environment" class="gallery-img" loading="lazy" />
+              <div class="gallery-content">
+                <div class="gallery-title">01 — WebXR Spatial Desk</div>
+                <p class="gallery-caption">Interactive 3D studio pedestals featuring Rice (₦25,000), Cooking Oil (₦8,500), and Drinks (₦4,500) with live counters.</p>
+              </div>
+            </div>
+            <div class="gallery-card">
+              <img src="/images/showcase-02-order-preparation.jpg" alt="Order Basket Preparation Safeguard" class="gallery-img" loading="lazy" />
+              <div class="gallery-content">
+                <div class="gallery-title">02 — Order Preparation Safeguard</div>
+                <p class="gallery-caption">Selecting Cooking Oil stages ₦8,500 into the basket while securely holding stock at 8 until explicit merchant confirmation.</p>
+              </div>
+            </div>
+            <div class="gallery-card">
+              <img src="/images/showcase-03-sale-confirmed.jpg" alt="Instant Sale Execution and Stock Deduction" class="gallery-img" loading="lazy" />
+              <div class="gallery-content">
+                <div class="gallery-title">03 — Verified Transaction Execution</div>
+                <p class="gallery-caption">Confirming the sale deducts stock to 7, credits ₦8,500 revenue, increments completed sales to 1, and clears the basket.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Product Vision & Why Spatial Section -->
+        <section id="vision" style="padding-bottom: 80px;">
+          <div class="section-header">
+            <div class="section-label">Vision &amp; Philosophy</div>
+            <h2 class="section-title">Why Spatial Business?</h2>
+            <p class="section-desc">
+              Flat spreadsheets and cluttered point-of-sale screens lack physical intuition and create room for costly bookkeeping errors. Spatial computing invites us to rethink operations as a physical workspace.
+            </p>
+          </div>
+
+          <div class="vision-grid">
+            <!-- Implemented Functionality -->
+            <div class="vision-card implemented">
+              <span class="vision-tag tag-active">Verified In Current Prototype</span>
+              <h3 style="font-size: 1.3rem; margin: 0 0 10px 0;">Hands-First Commerce Prototype</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; margin: 0;">
+                A fully operational WebXR application demonstrating tangible spatial point-of-sale interaction:
+              </p>
+              <ul class="vision-list">
+                <li><strong>Interactive 3D Pedestals:</strong> Procedural geometry and PBR materials rendered in Three.js r185.</li>
+                <li><strong>Hands-First Interaction:</strong> Dual pointer model supporting both ray targeting and direct poke gestures.</li>
+                <li><strong>Human Confirmation Safeguard:</strong> Explicit transaction gating preventing premature stock deduction.</li>
+                <li><strong>Debounced Confirmation Engine:</strong> Multi-event deduplication preventing duplicate transactions.</li>
+                <li><strong>Universal WebXR Deployment:</strong> Runs in Meta Quest Browser, desktop Chromium, and mobile browsers with zero install.</li>
+                <li><strong>Sample In-Memory Ledger:</strong> Real-time in-memory inventory counters and revenue calculation.</li>
+              </ul>
+            </div>
+
+            <!-- Future Roadmap Vision -->
+            <div class="vision-card future">
+              <span class="vision-tag tag-future">Future Product Roadmap</span>
+              <h3 style="font-size: 1.3rem; margin: 0 0 10px 0;">Spatial Business Operating System</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; margin: 0;">
+                The future trajectory as Spatial Business Desk evolves from prototype to complete business OS:
+              </p>
+              <ul class="vision-list">
+                <li><strong>Spatial Analytics Heatmaps:</strong> 3D visual data clouds showing sales velocity and customer footfall.</li>
+                <li><strong>Automated Replenishment:</strong> Real-time vendor reordering and automated low-stock warnings.</li>
+                <li><strong>Passthrough Barcode Scanning:</strong> Camera-driven physical barcode reading directly into virtual pedestals.</li>
+                <li><strong>Multi-Merchant Cloud Sync:</strong> Persistent edge database sync for multi-store retail enterprises.</li>
+                <li><strong>Shared Collaborative Spaces:</strong> Multi-user WebXR sessions for remote staff training and team reviews.</li>
+                <li><strong>Horizon Store Packaging:</strong> Installable Meta Horizon Store PWA with windowed 2D and immersive 3D modes.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technology Architecture Section -->
+        <section id="tech" style="padding-bottom: 80px;">
+          <div class="section-header">
+            <div class="section-label">Architecture</div>
+            <h2 class="section-title">Built for the Open Immersive Web</h2>
+            <p class="section-desc">
+              Engineered with Meta’s official developer tooling, high-performance WebGL rendering, and zero-allocation entity systems.
+            </p>
+          </div>
+
+          <div class="tech-grid">
+            <div class="tech-item">
+              <div class="tech-icon">IW</div>
+              <div>
+                <div class="tech-name">Meta IWSDK v1.1.0</div>
+                <p class="tech-desc">Meta Immersive Web SDK driving WebXR session management, camera framing, and input pointer routing.</p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-icon">XR</div>
+              <div>
+                <div class="tech-name">Open WebXR Standards</div>
+                <p class="tech-desc">Cross-platform browser standard enabling immediate immersive execution across Meta Quest and desktop.</p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-icon">3D</div>
+              <div>
+                <div class="tech-name">Three.js r185</div>
+                <p class="tech-desc">High-performance 3D scene graph, procedural geometry, custom lighting gradients, and contact shadows.</p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-icon">EC</div>
+              <div>
+                <div class="tech-name">EliCS v3.4.2 ECS</div>
+                <p class="tech-desc">Pure entity-component architecture with query subscriptions and zero per-frame garbage collection allocations.</p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-icon">TS</div>
+              <div>
+                <div class="tech-name">TypeScript + Vite</div>
+                <p class="tech-desc">Strict type safety, modern modular architecture, and rapid build times for edge deployment.</p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-icon">CF</div>
+              <div>
+                <div class="tech-name">Cloudflare Pages</div>
+                <p class="tech-desc">Instant global edge delivery over HTTPS, optimized for sub-second asset loading on mobile and headsets.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bottom CTA Card -->
+        <section class="bottom-cta-card">
+          <h2 class="bottom-cta-title">
+            Experience the Next Dimension<br />
+            <span class="gradient-text">of Everyday Commerce</span>
+          </h2>
+          <p style="color: var(--text-muted); max-width: 620px; margin: 0 auto 36px auto; font-size: 1.1rem; line-height: 1.6;">
+            Step into the interactive showroom now. Select products, stage pending orders, and confirm sales with genuine spatial interaction.
+          </p>
+          <div class="cta-group" style="margin-bottom: 0;">
+            <button class="btn-primary action-enter-experience" style="padding: 18px 40px; font-size: 1.1rem;">
+              <span>Enter Spatial Business Desk</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <button class="btn-secondary action-watch-demo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Watch Demonstration</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+          <div class="footer-links">
+            <a href="https://spatial-business-desk.pages.dev/" class="footer-link">Live Experience</a>
+            <a href="https://github.com/stanley07/spatial-business-desk" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub Source Code</a>
+            <a href="#showcase" class="footer-link">Showcase</a>
+            <a href="#tech" class="footer-link">Tech Stack</a>
+          </div>
+          <div style="margin-bottom: 12px; font-weight: 600; color: #cbd5e1;">
+            Spatial Business Desk · Meta VR Start Developer Competition 2026
+          </div>
+          <div class="footer-disclaimer">
+            © 2026 Stanley Okafor. All rights reserved. Built as an independent competition entry using the Meta Immersive Web SDK. Not sponsored by, endorsed by, or an official product of Meta Platforms, Inc. All retail financial and inventory figures are fictional sample data for prototype demonstration.
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Video Demonstration Modal -->
+    <div id="video-modal" role="dialog" aria-modal="true" aria-labelledby="modal-video-title">
+      <div class="modal-content-card">
+        <div class="modal-header">
+          <div>
+            <h3 id="modal-video-title" class="modal-title">Spatial Business Desk — Demonstration Walkthrough</h3>
+            <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 2px;">Meta VR Start Developer Competition 2026 · Official 101s Submission Demo</div>
+          </div>
+          <button id="btn-close-modal" class="btn-close-modal" aria-label="Close video modal">&times;</button>
+        </div>
+        <video id="demo-video" class="modal-video-player" controls preload="metadata" playsinline poster="/images/spatial-business-desk-hero.png">
+          <source src="/video/Spatial_Business_Desk_Demo.mp4" type="video/mp4" />
+          Your browser does not support HTML5 video.
+        </video>
+        <div class="modal-footer">
+          <div>101 seconds · 1080p 30fps · Professional Nigerian English Voiceover &amp; Subtitles</div>
+          <a href="/video/Spatial_Business_Desk_Demo.mp4" download="Spatial_Business_Desk_Demo.mp4" class="btn-secondary" style="padding: 6px 14px; font-size: 0.82rem;">
+            Download MP4 (6.7MB)
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Core Script -->
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>
