@@ -6,52 +6,52 @@
 <style>
   .panel-root {
     flex-direction: column;
-    width: 420px;
+    width: 440px;
   }
 
   .panel-content {
     flex-direction: column;
-    gap: 7px;
-    padding: 22px;
+    gap: 8px;
+    padding: 24px;
   }
 
   .eyebrow {
-    color: #6b5a00;
-    font-size: 14px;
+    color: #38bdf8;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.6px;
   }
 
   .eyebrow:dark {
-    color: #f5d90a;
+    color: #38bdf8;
   }
 
   .heading {
-    color: #1c1d20;
-    font-size: 30px;
+    color: #ffffff;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 36px;
+    line-height: 34px;
   }
 
   .heading:dark {
-    color: #fafaf7;
+    color: #ffffff;
   }
 
   .body {
-    color: #3a3b40;
-    font-size: 20px;
-    line-height: 27px;
+    color: #94a3b8;
+    font-size: 18px;
+    line-height: 25px;
   }
 
   .body:dark {
-    color: #dddfe3;
+    color: #94a3b8;
   }
 
   .button {
     justify-content: flex-start;
-    margin-left: 22px;
-    margin-right: 22px;
-    margin-bottom: 22px;
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-bottom: 24px;
   }
 
   .button-label {
@@ -60,10 +60,10 @@
 </style>
 <Panel class="panel-root">
   <div class="panel-content">
-    <div class="eyebrow">IMMERSIVE WEB SDK</div>
-    <div class="heading">Hello, Immersive Web!</div>
-    <div class="body">Try each station around you,</div>
-    <div class="body">then make this scene your own.</div>
+    <div class="eyebrow">META VR START 2026</div>
+    <div class="heading">Spatial Business Desk</div>
+    <div class="body">Hands-first spatial inventory &amp; sales workspace.</div>
+    <div class="body">Point &amp; pinch products to stage orders, then pinch Confirm Sale.</div>
   </div>
   <Button id="xr-button" class="button">
     <ButtonIcon>
