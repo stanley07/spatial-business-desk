@@ -3,6 +3,7 @@
   Mesh,
   MeshStandardMaterial,
   RayInteractable,
+  PokeInteractable,
   Hovered,
   Pressed,
   createSystem,
@@ -16,6 +17,7 @@ import {
   DoubleSide,
   CylinderGeometry,
   SphereGeometry,
+  Object3D,
 } from 'three';
 
 type Product = {
@@ -28,6 +30,8 @@ type Product = {
   x: number;
   material?: MeshStandardMaterial;
 };
+
+let internalConfirmSale: (() => void) | null = null;
 
 export function createInventoryPrototype(world: World): void {
   const products: Product[] = [
@@ -73,6 +77,8 @@ export function createInventoryPrototype(world: World): void {
     z: number,
     width: number,
     height: number,
+    parent?: Mesh | Object3D,
+    rotY = 0,
   ) {
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
@@ -98,9 +104,18 @@ export function createInventoryPrototype(world: World): void {
     );
 
     mesh.position.set(x, y, z);
-    world.createTransformEntity(mesh);
+    if (rotY) {
+      mesh.rotation.y = rotY;
+    }
 
-    return (lines: string[]) => {
+    if (parent) {
+      parent.add(mesh);
+    } else {
+      world.createTransformEntity(mesh);
+    }
+
+    const render = (lines: string[]) => {
+      mesh.userData.textLines = lines;
       context.clearRect(0, 0, 1024, 256);
 
       context.fillStyle = '#142434';
@@ -129,6 +144,10 @@ export function createInventoryPrototype(world: World): void {
 
       texture.needsUpdate = true;
     };
+
+    mesh.userData.textLines = [];
+    render.mesh = mesh;
+    return render;
   }
 
   const renderHeading = createTextPanel(
@@ -144,7 +163,7 @@ export function createInventoryPrototype(world: World): void {
   );
 
   const renderConfirmation = createTextPanel(
-    1.22, 0.72, -1.10, 0.85, 0.19,
+    1.10, 0.72, -1.15, 0.85, 0.19, undefined, -0.32,
   );
 
   renderHeading([
@@ -200,6 +219,19 @@ export function createInventoryPrototype(world: World): void {
     renderConfirmation([
       'Select CONFIRM SALE to post order',
     ]);
+
+    const container = document.getElementById('scene-container');
+    if (container) {
+      container.dataset.revenue = String(totalRevenue);
+      container.dataset.completedOrders = String(completedOrders);
+      container.dataset.orderTotal = String(orderTotal());
+      container.dataset.itemCount = String(itemCount);
+      for (const p of products) {
+        const key = p.name.toLowerCase().replace(/\s+/g, '_');
+        container.dataset[`stock_${key}`] = String(p.stock);
+        container.dataset[`selected_${key}`] = String(p.selected);
+      }
+    }
   }
 
   // Interactive inventory objects.
@@ -289,9 +321,20 @@ export function createInventoryPrototype(world: World): void {
 
     const entity = world.createTransformEntity(mesh);
     entity.addComponent(RayInteractable);
+    (product as any).mesh = mesh;
+    (product as any).entity = entity;
 
-    mesh.addEventListener('click', () => {
-      console.log('[SBD-DIAG] PRODUCT CLICK:', product.name);
+    let lastProductSelectTime = 0;
+    const PRODUCT_SELECT_DEBOUNCE_MS = 500;
+    const handleProductSelect = () => {
+      const now = performance.now();
+      if (now - lastProductSelectTime < PRODUCT_SELECT_DEBOUNCE_MS) return;
+      lastProductSelectTime = now;
+
+      if (import.meta.env.DEV) {
+        console.log('[SBD-DIAG] PRODUCT SELECT:', product.name);
+      }
+
       if (product.selected >= product.stock) {
         refresh(`${product.name}: No more available`);
         return;
@@ -299,13 +342,19 @@ export function createInventoryPrototype(world: World): void {
 
       product.selected += 1;
       mesh.scale.setScalar(1.07);
+      setTimeout(() => mesh.scale.setScalar(1.0), 180);
 
       refresh(`${product.name} added to order`);
 
-      console.log(
-        `SBD CART: ${product.name}, selected ${product.selected}`,
-      );
-    });
+      if (import.meta.env.DEV) {
+        console.log(
+          `SBD CART: ${product.name}, selected ${product.selected}`,
+        );
+      }
+    };
+
+    mesh.addEventListener('click', handleProductSelect);
+    mesh.addEventListener('pointerdown', handleProductSelect);
   });
 
   // The confirmation button is an actual XR-selectable object.
@@ -315,80 +364,159 @@ export function createInventoryPrototype(world: World): void {
   });
 
   const confirmMesh = new Mesh(
-    new BoxGeometry(0.80, 0.32, 0.12),
+    new BoxGeometry(0.80, 0.32, 0.14),
     confirmMaterial,
   );
 
-  confirmMesh.position.set(1.22, 1.05, -1.15);
+  confirmMesh.position.set(1.10, 1.05, -1.20);
+  confirmMesh.rotation.y = -0.32; // ~18.5 degrees inward toward user
   confirmMesh.name = 'SBD-CONFIRM';
 
   const confirmEntity = world.createTransformEntity(confirmMesh);
   confirmEntity.addComponent(RayInteractable);
+  confirmEntity.addComponent(PokeInteractable);
 
   const renderButton = createTextPanel(
-    1.22, 1.05, -1.07, 0.72, 0.24,
+    0, 0, 0.072, 0.72, 0.24, confirmMesh,
   );
   renderButton(['CONFIRM SALE']);
 
-  confirmMesh.addEventListener('click', () => {
-    console.log('[SBD-DIAG] CONFIRM CLICK');
-    const total = orderTotal();
+  let lastConfirmTime = 0;
+  let isConfirmLocked = false;
+  const CONFIRM_DEBOUNCE_MS = 600;
 
+  function confirmSale(trigger = 'event'): boolean {
+    const now = performance.now();
+    if (now - lastConfirmTime < CONFIRM_DEBOUNCE_MS) {
+      if (import.meta.env.DEV) {
+        console.log(
+          `[SBD] Discarded duplicate confirm (${trigger}) within debounce window (${Math.round(now - lastConfirmTime)}ms)`,
+        );
+      }
+      return false;
+    }
+
+    if (isConfirmLocked) {
+      return false;
+    }
+
+    const total = orderTotal();
     if (total <= 0) {
       refresh('Add products before confirming');
-      return;
+      return false;
     }
 
-    for (const product of products) {
-      product.stock -= product.selected;
-      product.selected = 0;
+    isConfirmLocked = true;
+    lastConfirmTime = now;
+
+    try {
+      for (const product of products) {
+        product.stock -= product.selected;
+        product.selected = 0;
+      }
+
+      totalRevenue += total;
+      completedOrders += 1;
+
+      // Visual button feedback (emerald flash)
+      confirmMaterial.color.setHex(0x27ae60);
+      setTimeout(() => {
+        confirmMaterial.color.setHex(0x147e64);
+      }, 450);
+
+      refresh(`SALE CONFIRMED: ${money(total)}`);
+
+      if (import.meta.env.DEV) {
+        console.log(
+          `[SBD] SALE CONFIRMED (${trigger}): ${money(total)} | Revenue: ${money(totalRevenue)} | Completed: ${completedOrders}`,
+        );
+        console.log(
+          'SBD STOCK:',
+          products.map((p) => ({
+            name: p.name,
+            remaining: p.stock,
+          })),
+        );
+      }
+
+      return true;
+    } finally {
+      setTimeout(() => {
+        isConfirmLocked = false;
+      }, CONFIRM_DEBOUNCE_MS);
     }
+  }
 
-    totalRevenue += total;
-    completedOrders += 1;
+  confirmMesh.addEventListener('click', () => confirmSale('click'));
+  confirmMesh.addEventListener('pointerdown', () => confirmSale('pointerdown'));
 
-    refresh(`SALE CONFIRMED: ${money(total)}`);
-
-    console.log(
-      `SBD SALE CONFIRMED: ${money(total)}`,
-    );
-
-    console.log(
-      'SBD STOCK:',
-      products.map((p) => ({
-        name: p.name,
-        remaining: p.stock,
-      })),
-    );
+  confirmMesh.addEventListener('pointerenter', () => {
+    confirmMaterial.color.setHex(0x1c9878);
   });
+  confirmMesh.addEventListener('pointerleave', () => {
+    confirmMaterial.color.setHex(0x147e64);
+  });
+
+  // Direct internal module connection to ECS Pressed handler (no globals, no console bypass)
+  internalConfirmSale = () => confirmSale('ecs-pressed');
 
   refresh();
 
-  console.log('SBD: Sales workflow initialized');
+  if (import.meta.env.DEV) {
+    const container = document.getElementById('scene-container');
+    if (container) {
+      (container as any).__sbd_dev_meshes = {
+        confirmMesh,
+        products,
+      };
+    }
+    console.log('SBD: Sales workflow initialized (release candidate)');
+  }
 }
 
-
-
-
-
-// META-VR-13J: temporary XR input diagnostic.
-export class InventoryTargetDiagnosticSystem extends createSystem({
-  hovered: { required: [RayInteractable, Hovered] },
-  pressed: { required: [RayInteractable, Pressed] },
+// META-VR-13J / META-VR-20C: Hands-first XR interaction system.
+export class InventoryInteractionSystem extends createSystem({
+  rayHovered: { required: [RayInteractable, Hovered] },
+  rayPressed: { required: [RayInteractable, Pressed] },
+  pokeHovered: { required: [PokeInteractable, Hovered] },
+  pokePressed: { required: [PokeInteractable, Pressed] },
 }) {
   init(): void {
-    this.queries.hovered.subscribe('qualify', (entity) => {
+    const handlePress = (entity: any, kind: string) => {
       const name = entity.object3D?.name ?? '';
-      if (name.startsWith('SBD-')) {
-        console.log('[SBD-DIAG] HOVER:', name);
+      if (name === 'SBD-CONFIRM') {
+        if (import.meta.env.DEV) {
+          console.log(`[SBD-DIAG] ${kind} PRESS:`, name);
+        }
+        internalConfirmSale?.();
       }
+    };
+
+    if (import.meta.env.DEV) {
+      this.queries.rayHovered.subscribe('qualify', (entity) => {
+        const name = entity.object3D?.name ?? '';
+        if (name.startsWith('SBD-')) {
+          console.log('[SBD-DIAG] RAY HOVER:', name);
+        }
+      });
+
+      this.queries.pokeHovered.subscribe('qualify', (entity) => {
+        const name = entity.object3D?.name ?? '';
+        if (name.startsWith('SBD-')) {
+          console.log('[SBD-DIAG] POKE HOVER:', name);
+        }
+      });
+    }
+
+    this.queries.rayPressed.subscribe('qualify', (entity) => {
+      handlePress(entity, 'RAY');
     });
 
-    this.queries.pressed.subscribe('qualify', (entity) => {
-      const name = entity.object3D?.name ?? '';
-      if (name.startsWith('SBD-')) {
-        console.log('[SBD-DIAG] PRESS:', name);
-      }
+    this.queries.pokePressed.subscribe('qualify', (entity) => {
+      handlePress(entity, 'POKE');
     });
   }
 }
+
+// Retain export alias so src/index.ts and any other consumers remain 100% compatible
+export { InventoryInteractionSystem as InventoryTargetDiagnosticSystem };
