@@ -13,7 +13,7 @@ See your inventory. Reach for products. Prepare orders. Confirm sales. Watch you
 
 *Explore the interactive workspace in your browser or Meta Quest Browser.*
 
-**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/thtxHUW_JVw)** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
+**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/H54b70JewhE)** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
 
 ---
 
