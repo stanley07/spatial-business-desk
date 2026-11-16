@@ -58,7 +58,7 @@ Spatial Business Desk supports both public browser viewing and local simulated W
   2. Click **"Enter Experience"** on the landing page to reveal the 3D workspace.
   3. In the IWER emulator toolbar, accept the offered WebXR session and set input mode to **Simulated Hands**.
   4. Use the simulated right hand to point the target ray at product pedestals and cart buttons, pinching to interact.
-- **Reference recording:** The official competition video ([https://youtu.be/thtxHUW_JVw](https://youtu.be/thtxHUW_JVw)) demonstrates this genuine hands-first simulator execution end-to-end.
+- **Reference recording:** The official competition video ([https://youtu.be/H54b70JewhE](https://youtu.be/H54b70JewhE)) demonstrates this genuine hands-first simulator execution end-to-end.
 
 #### 3. Physical Meta Quest Headset (XR Session Offer Configured)
 - **Configuration:** The application configures `world.xr.offer: "always"` in `iwsdk.config.json` with `handTracking: true`, which initiates the WebXR Session Offer API (`navigator.xr.offerSession`) supported by Meta Quest Browser in Horizon OS.
@@ -242,7 +242,7 @@ Explore the working prototype and see what happens when inventory, interaction, 
 
 **[ENTER SPATIAL BUSINESS DESK](https://spatial-business-desk.pages.dev/)**
 
-**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/thtxHUW_JVw)**
+**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/H54b70JewhE)**
 
 *Built for Meta VR Start Developer Competition 2026.*
 
@@ -259,7 +259,7 @@ Explore the working prototype and see what happens when inventory, interaction, 
 An immersive productivity concept exploring the future of business operations.
 
 **Live Experience:** [https://spatial-business-desk.pages.dev/](https://spatial-business-desk.pages.dev/)
-**Competition Video:** [https://youtu.be/thtxHUW_JVw](https://youtu.be/thtxHUW_JVw)
+**Competition Video:** [https://youtu.be/H54b70JewhE](https://youtu.be/H54b70JewhE)
 **Source Code:** [https://github.com/stanley07/spatial-business-desk](https://github.com/stanley07/spatial-business-desk)
 **Competition:** Meta VR Start Developer Competition 2026
 **Technology:** Meta Immersive Web SDK · WebXR · Three.js · TypeScript
