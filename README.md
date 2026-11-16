@@ -9,11 +9,11 @@ See your inventory. Reach for products. Prepare orders. Confirm sales. Watch you
 
 **Spatial Business Desk brings everyday business operations into an interactive 3D workspace — powered by Meta Immersive Web SDK.**
 
-**[ENTER THE EXPERIENCE](https://spatial-business-desk.pages.dev/)**
+**[ENTER THE LIVE SHOWROOM](https://spatial-business-desk.pages.dev/)**
 
-*Explore the interactive workspace in your browser.*
+*Explore the interactive workspace in your browser or Meta Quest Browser.*
 
-**Demo video: publishing soon** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
+**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/thtxHUW_JVw)** · **[EXPLORE THE CODE](https://github.com/stanley07/spatial-business-desk)**
 
 ---
 
@@ -28,6 +28,73 @@ Spatial Business Desk explores a future where immersive technology is not just f
 Built with Meta Immersive Web SDK, our prototype brings inventory, order preparation, and sales confirmation into one spatial experience.
 
 **Innovation category:** Productivity / New Experience
+
+---
+
+## COMPETITION JUDGE VERIFICATION GUIDE
+
+### How to Experience and Evaluate the Prototype
+
+Spatial Business Desk supports both public browser viewing and local simulated WebXR evaluation. Please review the three interaction modes below to assess the application accurately:
+
+#### 1. Desktop Mode (Public Website — Mouse Fallback)
+- **Live URL:** [https://spatial-business-desk.pages.dev/](https://spatial-business-desk.pages.dev/)
+- **How to interact:** Click **"Enter Experience"** on the landing page (or append `#experience` to the URL) to access the 3D showroom.
+- **Input mechanism:** Standard desktop browsers run in **Desktop Mouse Fallback** mode (`canvasPointerEvents: true`).
+- **Functionality:** Click products to stage them into the cart kiosk, click `[+]`/`[-]`/`[×]` buttons on cart rows to edit quantities, click **"Undo Edit"** to revert, click **"Clear Cart"** to reset, and click **"Confirm Sale"** on the terminal to finalize the order.
+- **Scope note:** Desktop mode uses mouse pointer raycasting, which provides functional verification of the sales flow but does not demonstrate optical hand tracking.
+
+#### 2. XR Simulator Mode (Local Development — Hands-First WebXR)
+- **Environment:** Local development server running the Meta Immersive Web Emulation Runtime (IWER).
+- **Reproduction steps:**
+  ```bash
+  git clone https://github.com/stanley07/spatial-business-desk.git
+  cd spatial-business-desk
+  npm install
+  npm run dev
+  ```
+- **How to test:**
+  1. `npm run dev` launches the CLI-managed dev server and opens a Chromium browser window hosting the IWER Meta Quest 3 device emulator.
+  2. Click **"Enter Experience"** on the landing page to reveal the 3D workspace.
+  3. In the IWER emulator toolbar, accept the offered WebXR session and set input mode to **Simulated Hands**.
+  4. Use the simulated right hand to point the target ray at product pedestals and cart buttons, pinching to interact.
+- **Reference recording:** The official competition video ([https://youtu.be/thtxHUW_JVw](https://youtu.be/thtxHUW_JVw)) demonstrates this genuine hands-first simulator execution end-to-end.
+
+#### 3. Physical Meta Quest Headset (XR Session Offer Configured)
+- **Configuration:** The application configures `world.xr.offer: "always"` in `iwsdk.config.json` with `handTracking: true`, which initiates the WebXR Session Offer API (`navigator.xr.offerSession`) supported by Meta Quest Browser in Horizon OS.
+- **Hardware testing disclosure:** **Physical hardware testing on a Meta Quest headset remains unverified.** All hands-first WebXR validation in this submission was performed using the IWER Meta Quest 3 simulator. Do not assume physical headset performance has been verified in QA.
+
+---
+
+## VALIDATED PROTOTYPE FUNCTIONALITY
+
+### Technical Validation Summary
+
+The application’s transactional logic and spatial interface have been validated through two distinct testing phases:
+
+#### A. End-to-End Retail Reproduction (10/10 Steps Passed)
+Recently performed automated simulator reproduction exercising the complete retail lifecycle:
+1. **Workspace entry:** Landing page overlay dismissed; 3D workspace active.
+2. **Product targeting:** Simulated hand rays acquire Rice and Cooking Oil with visual hover highlights.
+3. **Multi-product staging:** Rice ×2 and Cooking Oil ×1 staged into the cart; Order Total staged at **₦58,500** while pedestal stock remains unchanged at 12 and 8 (no premature stock deduction).
+4. **Quantity reduction:** Rice row `[-]` button decrements quantity to ×1; Order Total updates to **₦33,500**.
+5. **Item removal:** Cooking Oil row `[×]` button removes the product; Order Total updates to **₦25,000**.
+6. **Undo action:** `SBD-CART:UNDO` restores Cooking Oil ×1 from the cart history stack; Order Total returns to **₦33,500**.
+7. **Clear Cart & pre-confirmation lock:** `SBD-CART:CLEAR` empties the basket; deliberate pinch on `SBD-CONFIRM` is rejected (sale confirmation is disabled on an empty cart).
+8. **New order staging:** Cooking Oil `[+]` stages 1 unit; Order Total reads **₦8,500**; Confirm Sale re-enables.
+9. **Deliberate sale execution:** Pinching `SBD-CONFIRM` commits the transaction:
+   - **Cooking Oil stock:** Decrements from **8 → 7**.
+   - **Total revenue:** Increments from **₦0 → ₦8,500**.
+   - **Completed sales:** Advances from **0 → 1**.
+   - **Cart basket:** Resets to empty (**₦0**).
+10. **Post-transaction safeguards:** Counters accurately reflect updated business metrics; post-confirmation Undo is locked (committed transactions cannot be undone); multi-event pinch deduplication prevents accidental duplicate transactions.
+
+#### B. Previously Established Acceptance Checks
+- **9/9 Hands-First Acceptance Suite:** Verified ergonomic ray angle, poke collider registration, cart kiosk clearance, multi-product staging, granular editing, reversible history stack, empty-cart guard, deliberate transaction commit, and multi-event debounce.
+- **4/4 Desktop Fallback Suite:** Verified 2D canvas mouse raycasting, product selection, row editing, and transaction confirmation.
+
+### Data & Financial Scope
+Spatial Business Desk is a prototype retail concept with an in-memory sample ledger. All currency figures (Nigerian Naira ₦), stock counts, and sales metrics represent temporary demonstration data for prototype evaluation. The application does not connect to live banking networks or merchant settlement accounts.
 
 ---
 
@@ -175,7 +242,7 @@ Explore the working prototype and see what happens when inventory, interaction, 
 
 **[ENTER SPATIAL BUSINESS DESK](https://spatial-business-desk.pages.dev/)**
 
-**Demo video: publishing soon**
+**[WATCH COMPETITION VIDEO (YouTube)](https://youtu.be/thtxHUW_JVw)**
 
 *Built for Meta VR Start Developer Competition 2026.*
 
@@ -192,9 +259,10 @@ Explore the working prototype and see what happens when inventory, interaction, 
 An immersive productivity concept exploring the future of business operations.
 
 **Live Experience:** [https://spatial-business-desk.pages.dev/](https://spatial-business-desk.pages.dev/)
+**Competition Video:** [https://youtu.be/thtxHUW_JVw](https://youtu.be/thtxHUW_JVw)
 **Source Code:** [https://github.com/stanley07/spatial-business-desk](https://github.com/stanley07/spatial-business-desk)
 **Competition:** Meta VR Start Developer Competition 2026
-**Technology:** Meta Immersive Web SDK · WebXR · Three.js · TypeScrip
+**Technology:** Meta Immersive Web SDK · WebXR · Three.js · TypeScript
 
 © 2026 Spatial Business Desk. Competition prototype.
 
